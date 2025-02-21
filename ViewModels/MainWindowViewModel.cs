@@ -1,10 +1,10 @@
-﻿using ReactiveUI;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO.Ports;
 
 namespace ArenaHub_Avalonia.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : INotifyPropertyChanged
     {
         public ObservableCollection<string> AvailablePorts { get; set; }
         public string SelectedPort { get; set; }
@@ -17,6 +17,12 @@ namespace ArenaHub_Avalonia.ViewModels
         public string LogMessages { get; set; }
 
         public ObservableCollection<PortViewModel> Ports { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public MainWindowViewModel()
         {
@@ -34,10 +40,31 @@ namespace ArenaHub_Avalonia.ViewModels
         }
     }
 
-    public class PortViewModel : ReactiveObject
+    public class PortViewModel : INotifyPropertyChanged
     {
         public string PortName { get; set; }
-        public string SelectedPort { get; set; }
+
+        private string _selectedPort;
+        public string SelectedPort
+        {
+            get => _selectedPort;
+            set
+            {
+                if (_selectedPort != value)
+                {
+                    _selectedPort = value;
+                    OnPropertyChanged(nameof(SelectedPort));
+                    OnPropertyChanged(nameof(ConnectionStatus));
+                }
+            }
+        }
+
         public string ConnectionStatus => string.IsNullOrEmpty(SelectedPort) ? "Disconnected" : "Connected";
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

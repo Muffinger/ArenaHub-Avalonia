@@ -1,56 +1,56 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Arena Hub - Avalonia" Width="900" Height="600">
-  <Grid>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="300"/>
-      <ColumnDefinition Width="260"/>
-      <ColumnDefinition/>
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="72"/>
-      <RowDefinition/>
-    </Grid.RowDefinitions>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="260"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="72"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
 
-    <!-- HEADER -->
-    <Grid Grid.ColumnSpan="3" Background="#FF2E2E2E">
-      <TextBlock Text="Arena Hub" Foreground="White" FontSize="20" FontWeight="Bold" HorizontalAlignment="Left" Margin="10"/>
+        <!-- HEADER -->
+        <Grid Grid.ColumnSpan="3" Background="#FF2E2E2E">
+            <TextBlock Text="Arena Hub" Foreground="White" FontSize="20" FontWeight="Bold" HorizontalAlignment="Left" Margin="10"/>
+        </Grid>
+
+        <!-- PORTS -->
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="10">
+            <TextBlock Text="Ports" FontWeight="Bold"/>
+            <ListBox Items="{Binding Ports}" SelectedItem="{Binding SelectedPort}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding PortName}" Width="70"/>
+                            <ComboBox Items="{Binding AvailablePorts}" SelectedItem="{Binding SelectedPort}" />
+                            <TextBlock Text="{Binding ConnectionStatus}" Width="120" Background="{Binding StatusColor}" Foreground="White" Padding="5,2"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+
+        <!-- SETTINGS -->
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10">
+            <TextBlock Text="Settings" FontWeight="Bold"/>
+            <TextBlock Text="Baud Rate"/>
+            <ComboBox Items="{Binding BaudRates}" SelectedItem="{Binding SelectedBaudRate}" />
+            <TextBlock Text="Data Bits"/>
+            <ComboBox Items="{Binding DataBitsOptions}" SelectedItem="{Binding SelectedDataBits}" />
+            <TextBlock Text="Parity"/>
+            <ComboBox Items="{Binding Parities}" SelectedItem="{Binding SelectedParity}" />
+        </StackPanel>
+
+        <!-- LOGS -->
+        <TabControl Grid.Row="1" Grid.Column="2">
+            <TabItem Header="Log Console">
+                <ScrollViewer>
+                    <TextBox Text="{Binding LogMessages}" IsReadOnly="True"/>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
     </Grid>
-
-    <!-- PORTS -->
-    <StackPanel Grid.Row="1" Grid.Column="0" Margin="10">
-      <TextBlock Text="Ports" FontWeight="Bold"/>
-      <ListBox Items="{Binding Ports}" SelectedItem="{Binding SelectedPort}">
-        <ListBox.ItemTemplate>
-          <DataTemplate>
-            <StackPanel Orientation="Horizontal">
-              <TextBlock Text="{Binding PortName}" Width="70"/>
-              <ComboBox Items="{Binding AvailablePorts}" SelectedItem="{Binding SelectedPort}" />
-              <TextBlock Text="{Binding ConnectionStatus}" Width="120" Background="{Binding StatusColor}" Foreground="White" Padding="5,2"/>
-            </StackPanel>
-          </DataTemplate>
-        </ListBox.ItemTemplate>
-      </ListBox>
-    </StackPanel>
-
-    <!-- SETTINGS -->
-    <StackPanel Grid.Row="1" Grid.Column="1" Margin="10">
-      <TextBlock Text="Settings" FontWeight="Bold"/>
-      <TextBlock Text="Baud Rate"/>
-      <ComboBox Items="{Binding BaudRates}" SelectedItem="{Binding SelectedBaudRate}" />
-      <TextBlock Text="Data Bits"/>
-      <ComboBox Items="{Binding DataBitsOptions}" SelectedItem="{Binding SelectedDataBits}" />
-      <TextBlock Text="Parity"/>
-      <ComboBox Items="{Binding Parities}" SelectedItem="{Binding SelectedParity}" />
-    </StackPanel>
-
-    <!-- LOGS -->
-    <TabControl Grid.Row="1" Grid.Column="2">
-      <TabItem Header="Log Console">
-        <ScrollViewer>
-          <TextBox Text="{Binding LogMessages}" IsReadOnly="True"/>
-        </ScrollViewer>
-      </TabItem>
-    </TabControl>
-  </Grid>
 </Window>

@@ -1,37 +1,42 @@
-﻿using System;
+﻿using System.Collections.ObjectModel;
 using System.IO.Ports;
-using System.Collections.Generic;
 
-namespace ArenaHub_Avalonia.Models
+namespace ArenaHub_Avalonia.ViewModels
 {
-    public class Interface
+    public class MainWindowViewModel : ViewModelBase
     {
-        private SerialPort serialPort;
+        public ObservableCollection<string> AvailablePorts { get; set; }
+        public string SelectedPort { get; set; }
+        public ObservableCollection<int> BaudRates { get; set; }
+        public int SelectedBaudRate { get; set; }
+        public ObservableCollection<int> DataBitsOptions { get; set; }
+        public int SelectedDataBits { get; set; }
+        public ObservableCollection<Parity> Parities { get; set; }
+        public Parity SelectedParity { get; set; }
+        public string LogMessages { get; set; }
 
-        public void OpenPort(string portName, int baudRate, Parity parity, int dataBits, StopBits stopBits)
+        public ObservableCollection<PortViewModel> Ports { get; set; }
+
+        public MainWindowViewModel()
         {
-            if (serialPort != null && serialPort.IsOpen)
+            AvailablePorts = new ObservableCollection<string>(SerialPort.GetPortNames());
+            BaudRates = new ObservableCollection<int> { 9600, 115200 };
+            DataBitsOptions = new ObservableCollection<int> { 7, 8 };
+            Parities = new ObservableCollection<Parity> { Parity.None, Parity.Odd, Parity.Even };
+
+            Ports = new ObservableCollection<PortViewModel>
             {
-                ClosePort();
-            }
-
-            serialPort = new SerialPort(portName, baudRate, parity, dataBits, stopBits);
-            serialPort.Open();
-            Console.WriteLine($"Port {portName} geöffnet.");
+                new PortViewModel { PortName = "Input 1" },
+                new PortViewModel { PortName = "Input 2" },
+                new PortViewModel { PortName = "Output Display" }
+            };
         }
+    }
 
-        public void ClosePort()
-        {
-            if (serialPort != null && serialPort.IsOpen)
-            {
-                serialPort.Close();
-                Console.WriteLine("Port geschlossen.");
-            }
-        }
-
-        public List<string> GetAvailablePorts()
-        {
-            return new List<string>(SerialPort.GetPortNames());
-        }
+    public class PortViewModel : ReactiveObject
+    {
+        public string PortName { get; set; }
+        public string SelectedPort { get; set; }
+        public string ConnectionStatus => string.IsNullOrEmpty(SelectedPort) ? "Disconnected" : "Connected";
     }
 }
